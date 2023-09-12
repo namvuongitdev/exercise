@@ -53,14 +53,11 @@ public class SanPhamController {
     @Autowired
     private IChiTietSanPhamService chiTietSanPhamService;
 
-    private Page<SanPham> list;
-
-
     @GetMapping("/hien-thi")
     public String hienThi(Model model, @RequestParam(defaultValue = "1") int page) {
         if (page < 1) page = 1;
         Pageable pageable = PageRequest.of(page - 1, 5);
-        list = iSanPhamService.findAll(pageable);
+        Page<SanPham> list = iSanPhamService.findAll(pageable);
         model.addAttribute("listSanPham", list);
         model.addAttribute("listChatLieu", iChatLieuService.getAll());
         model.addAttribute("listFromDang", iFormDangService.getAll());
@@ -71,13 +68,26 @@ public class SanPhamController {
     }
 
     @GetMapping("/filter")
-    public String filterSanPham(@RequestParam String danhMuc , @RequestParam String tenSanPham){
-      System.out.println("danh muc" + danhMuc);
+    public String filterSanPham(@RequestParam(required = false) String danhMuc ,@RequestParam(defaultValue = "1") Integer page,
+    @RequestParam(required = false) String search , @RequestParam(required = false) String trangThai,
+    @RequestParam(required = false) String chatLieu , @RequestParam(required = false) String kieuDang ,Model model){
+        Pageable pageable = PageRequest.of(page - 1, 5);
         SanPhamFilter filter = SanPhamFilter.builder()
                 .danhMuc(danhMuc)
+                .search(search)
+                .chatLieu(chatLieu)
+                .kieuDang(kieuDang)
+                .trangThai(trangThai)
                 .build();
-        System.out.println("san pham : " + iSanPhamService.sanPhamFilter(filter));
-        return null;
+        Page<SanPham> listSanPhamFilter = iSanPhamService.sanPhamFilter(filter , pageable);
+        model.addAttribute("listSanPham", listSanPhamFilter);
+        model.addAttribute("filter", filter);
+        model.addAttribute("listChatLieu", iChatLieuService.getAll());
+        model.addAttribute("listFromDang", iFormDangService.getAll());
+        model.addAttribute("listDanhMuc", danhMucService.getAll());
+        model.addAttribute("pageNo", page);
+        model.addAttribute("page", page != 1 ? page * 5 - 4 : page);
+        return "quanLySanPham/sanpham/san-pham";
     }
 
     @GetMapping("/api-hien-thi/{page}")

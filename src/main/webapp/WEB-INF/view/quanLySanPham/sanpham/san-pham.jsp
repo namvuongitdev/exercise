@@ -70,24 +70,24 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${listSanPham.content}" var="sanPham" varStatus="i">
-                        <tr onclick="window.location.href='/san-pham/hien-thi/${sanPham[0]}'">
+                        <c:forEach items="${listSanPham.content}" var="sanPham" varStatus="i">
+                        <tr onclick="window.location.href='/san-pham/hien-thi/${sanPham.id}'">
                             <th scope="row">${i.index+page}</th>
                             <td>
-                                <img src="/image/${sanPham[3]}">
+                                <img src="/image/${sanPham.img}">
                             </td>
-                            <td>${sanPham[1]}</td>
-                            <td><fmt:formatNumber pattern="#,###" value="${sanPham[2]}">
+                            <td>${sanPham.ten}</td>
+                            <td><fmt:formatNumber pattern="#,###" value="${sanPham.giaBan}">
 
                             </fmt:formatNumber></td>
                             <td>
-                                <fmt:formatDate value="${sanPham[5]}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                <fmt:formatDate value="${sanPham.ngayTao}" pattern="yyyy-MM-dd HH:mm:ss"/>
                             </td>
                             <td>
                                 <button style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
                                         type="button"
-                                        class="${sanPham[4] == 0 ? 'btn btn-success' : 'btn btn-danger'}">
-                                        ${sanPham[4] == 0 ? 'Kinh doanh' : 'Ngừng kinh doanh'}</button>
+                                        class="${sanPham.trangThai == 0 ? 'btn btn-success' : 'btn btn-danger'}">
+                                        ${sanPham.trangThai == 0 ? 'Kinh doanh' : 'Ngừng kinh doanh'}</button>
                             </td>
                         </tr>
                     </c:forEach>

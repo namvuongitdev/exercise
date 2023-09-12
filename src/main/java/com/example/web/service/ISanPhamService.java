@@ -21,6 +21,6 @@ public interface ISanPhamService {
 
     List<SanPham> getAll();
 
-    List<SanPham> sanPhamFilter(SanPhamFilter filter);
+    Page<SanPham> sanPhamFilter(SanPhamFilter filter ,Pageable pageable);
 
 }

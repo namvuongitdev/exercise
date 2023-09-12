@@ -1,5 +1,7 @@
 package com.example.web.service.impl;
+import com.example.web.model.ChatLieu;
 import com.example.web.model.DanhMuc;
+import com.example.web.model.KieuDang;
 import com.example.web.model.SanPham;
 import com.example.web.repository.ISanPhamRepository;
 import com.example.web.response.SanPhamFilter;
@@ -28,7 +30,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
     @Override
     public Page<SanPham> findAll(Pageable pageable) {
 
-        return iSanPhamRepository.findAllSanPham(pageable);
+        return iSanPhamRepository.findAll(pageable);
     }
 
     @Override
@@ -54,21 +56,33 @@ public class SanPhamServiceImpl implements ISanPhamService {
     }
 
     @Override
-    public List<SanPham> sanPhamFilter(SanPhamFilter filter) {
+    public Page<SanPham> sanPhamFilter(SanPhamFilter filter , Pageable pageable) {
         return iSanPhamRepository.findAll(new Specification<SanPham>() {
             @Override
             public Predicate toPredicate(Root<SanPham> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                  List<Predicate> predicates = new ArrayList<>();
-//                 if(!filter.getSearch().isEmpty() && filter.getSearch() != null){
-//                      predicates.add(criteriaBuilder.equal(root.get("ten"),filter.getSearch()));
-//                 }
+                 if(!filter.getSearch().isEmpty() && filter.getSearch() != null){
+                      predicates.add(criteriaBuilder.or(criteriaBuilder.equal(root.get("ma") , filter.getSearch()) ,
+                              criteriaBuilder.equal(root.get("ten") , filter.getSearch())));
+                 }
                  if(!filter.getDanhMuc().isEmpty() && filter.getDanhMuc() != null){
                      DanhMuc danhMuc = DanhMuc.builder().id(filter.getDanhMuc()).build();
                       predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("danhMuc") , danhMuc)));
                  }
+                if(!filter.getChatLieu().isEmpty() && filter.getChatLieu() != null){
+                    ChatLieu chatLieu = ChatLieu.builder().id(UUID.fromString(filter.getChatLieu())).build();
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("chatLieu") , chatLieu)));
+                }
+                if(!filter.getKieuDang().isEmpty() && filter.getKieuDang() != null){
+                    KieuDang kieuDang = KieuDang.builder().id(UUID.fromString(filter.getKieuDang())).build();
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("kieuDang") , kieuDang)));
+                }
+                if(!filter.getTrangThai().isEmpty() && filter.getTrangThai() != null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("trangThai") , filter.getTrangThai())));
+                }
                  return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
-        });
+        } , pageable);
     }
 
 }

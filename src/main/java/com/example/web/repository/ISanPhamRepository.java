@@ -15,7 +15,6 @@ public interface ISanPhamRepository extends JpaRepository<SanPham, UUID>  , JpaS
     @Query(value = "select  sanPham.id , sanPham.ten , sanPham.giaBan , sanPham.img ,sanPham.trangThai  , sanPham.ngayTao ,sanPham.ma from SanPham sanPham where sanPham.ten like ?1 or sanPham.ma like ?1 ")
     Page<SanPham> getAllSanPhamByTenOrMa(String value, Pageable pageable);
 
-    @Query(value = "select  sanPham.id , sanPham.ten , sanPham.giaBan , sanPham.img ,sanPham.trangThai  , sanPham.ngayTao ,sanPham.ma from SanPham sanPham  ")
-    Page<SanPham> findAllSanPham(Pageable pageable);
-
+    @Override
+    Page<SanPham> findAll(Pageable pageable);
 }
