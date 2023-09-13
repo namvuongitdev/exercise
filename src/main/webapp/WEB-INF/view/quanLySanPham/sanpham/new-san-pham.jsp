@@ -95,7 +95,7 @@
                                 <div class="form-floating">
                                     <select name="kieuDang" class="form-select" id="kieuDang">
                                         <c:forEach items="${listFromDang}" var="dang">
-                                            <option value="${dang.id}" ${sp.formDang.id == dang.id ? 'selected' : '' }>${dang.ten}</option>
+                                                <option value="${dang.id}" ${sp.formDang.id == dang.id ? 'selected' : '' }>${dang.ten}</option>
                                         </c:forEach>
                                     </select>
                                     <label for="kieuDang">Kiểu Dáng</label>
@@ -308,9 +308,7 @@
 <script type="text/javascript">
     function addAnhCTSP(id) {
         document.getElementById("themAnh").innerHTML = `<form action=` + id + ` method="post" enctype="multipart/form-data">`
-            + `<input type='file' name='file'>` + `  <button class='btn btn-primary'>Xác Nhận</button>` + `</form>`
-
-    }
+            + `<input type='file' name='file'>` + `  <button class='btn btn-primary'>Xác Nhận</button>` + `</form>`}
 </script>
 </body>
 </html>

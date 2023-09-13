@@ -1,4 +1,5 @@
 package com.example.web.controller;
+
 import com.example.web.model.ChiTietSanPham;
 import com.example.web.model.SanPham;
 import com.example.web.response.SanPhamFilter;
@@ -17,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -59,27 +60,21 @@ public class SanPhamController {
         Pageable pageable = PageRequest.of(page - 1, 5);
         Page<SanPham> list = iSanPhamService.findAll(pageable);
         model.addAttribute("listSanPham", list);
-        model.addAttribute("listChatLieu", iChatLieuService.getAll());
+            model.addAttribute("listChatLieu", iChatLieuService.getAll());
         model.addAttribute("listFromDang", iFormDangService.getAll());
         model.addAttribute("listDanhMuc", danhMucService.getAll());
+        model.addAttribute("filterSanPham", new SanPhamFilter());
         model.addAttribute("pageNo", page);
         model.addAttribute("page", page != 1 ? page * 5 - 4 : page);
         return "quanLySanPham/sanpham/san-pham";
     }
 
     @GetMapping("/filter")
-    public String filterSanPham(@RequestParam(required = false) String danhMuc ,@RequestParam(defaultValue = "1") Integer page,
-    @RequestParam(required = false) String search , @RequestParam(required = false) String trangThai,
-    @RequestParam(required = false) String chatLieu , @RequestParam(required = false) String kieuDang ,Model model){
+    public String filterSanPham(@RequestParam(defaultValue = "1") Integer page,
+                                @ModelAttribute("filterSanPham") SanPhamFilter filter,
+                                Model model) {
         Pageable pageable = PageRequest.of(page - 1, 5);
-        SanPhamFilter filter = SanPhamFilter.builder()
-                .danhMuc(danhMuc)
-                .search(search)
-                .chatLieu(chatLieu)
-                .kieuDang(kieuDang)
-                .trangThai(trangThai)
-                .build();
-        Page<SanPham> listSanPhamFilter = iSanPhamService.sanPhamFilter(filter , pageable);
+        Page<SanPham> listSanPhamFilter = iSanPhamService.sanPhamFilter(filter, pageable);
         model.addAttribute("listSanPham", listSanPhamFilter);
         model.addAttribute("filter", filter);
         model.addAttribute("listChatLieu", iChatLieuService.getAll());
@@ -92,15 +87,15 @@ public class SanPhamController {
 
     @GetMapping("/api-hien-thi/{page}")
     @ResponseBody
-    public Page<SanPham> apiSanPham(@PathVariable Integer page , @RequestParam(required = false) String value) {
+    public Page<SanPham> apiSanPham(@PathVariable Integer page, @RequestParam(required = false) String value) {
         Pageable pageable = PageRequest.of(page - 1, 5);
         Page listSanPham = null;
-        if(value.isEmpty()){
-             listSanPham = iSanPhamService.findAll(pageable);
+        if (value.isEmpty()) {
+            listSanPham = iSanPhamService.findAll(pageable);
             return listSanPham;
-        }else{
-             listSanPham =  iSanPhamService.getAllByTenOrMa(value, page);
-             return listSanPham;
+        } else {
+            listSanPham = iSanPhamService.getAllByTenOrMa(value, page);
+            return listSanPham;
         }
     }
 
@@ -114,21 +109,21 @@ public class SanPhamController {
     }
 
     @PostMapping(value = "/add")
-    public String addSanPham(@Valid @ModelAttribute("sanPham")  SanPham sanPham , BindingResult result , @RequestParam(required = false) String id) {
-       if(result.hasErrors()){
+    public String addSanPham(@Valid @ModelAttribute("sanPham") SanPham sanPham, BindingResult result, @RequestParam(required = false) String id) {
+        if (result.hasErrors()) {
             return "redirect:/san-pham/new";
-       }else {
-           Date date = java.util.Calendar.getInstance().getTime();
-           if (!id.isEmpty()) {
-               SanPham sp = iSanPhamService.getOne(UUID.fromString(id));
-               iSanPhamService.save(sp);
-           } else {
-               Integer maSanPham = iSanPhamService.getAll().size() + 1;
-               sanPham.setMa("SP" + maSanPham);
-               sanPham.setNgayTao(date);
-               iSanPhamService.save(sanPham);
-           }
-       }
+        } else {
+            Date date = java.util.Calendar.getInstance().getTime();
+            if (!id.isEmpty()) {
+                SanPham sp = iSanPhamService.getOne(UUID.fromString(id));
+                iSanPhamService.save(sp);
+            } else {
+                Integer maSanPham = iSanPhamService.getAll().size() + 1;
+                sanPham.setMa("SP" + maSanPham);
+                sanPham.setNgayTao(date);
+                iSanPhamService.save(sanPham);
+            }
+        }
         return "redirect:/san-pham/hien-thi/" + sanPham.getId();
     }
 

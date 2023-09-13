@@ -46,5 +46,17 @@
     </select>
 </div>
 <div class="col l-3">
+    <select name="sapXep" class="form-select">
+        <option value="">Tất cả</option>
+        <option value="ngayTao" ${filter.sapXep == 'ngayTao' ? 'selected' : ''}>Mới nhất</option>
+        <option value="price-asc" ${filter.sapXep == 'price-asc' ? 'selected' : ''}>
+            Thứ tự theo giá: thấp đến cao
+        </option>
+        <option value="price-desc" ${filter.sapXep == 'price-desc' ? 'selected' : ''}>
+            Thứ tự theo giá: cao xuống thấp
+        </option>
+    </select>
+</div>
+<div class="col l-3">
     <button class="btn btn-primary">Tìm kiếm</button>
 </div>

@@ -17,4 +17,5 @@ public class SanPhamFilter {
     private String chatLieu;
     private String kieuDang;
     private String trangThai;
+    private String sapXep;
 }

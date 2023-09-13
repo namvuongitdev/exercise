@@ -47,7 +47,7 @@
                 <br>
 <%--                filter sản phẩm--%>
                 <div class="row">
-                    <form action="/san-pham/filter">
+                    <form action="/san-pham/filter" modelAttribute="${filterSanPham}">
                         <div class="row">
                             <jsp:include page="filter-san-pham.jsp"></jsp:include>
                         </div>

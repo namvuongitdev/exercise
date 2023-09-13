@@ -16,9 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,7 +40,12 @@ public class SanPhamServiceImpl implements ISanPhamService {
 
     @Override
     public SanPham getOne(UUID id) {
-        return iSanPhamRepository.getOne(id);
+      Optional<SanPham> sanPham =  iSanPhamRepository.findById(id);
+      if(sanPham.isPresent()){
+          return sanPham.get();
+      }else{
+          return null;
+      }
     }
 
     @Override
@@ -79,6 +84,14 @@ public class SanPhamServiceImpl implements ISanPhamService {
                 }
                 if(!filter.getTrangThai().isEmpty() && filter.getTrangThai() != null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("trangThai") , filter.getTrangThai())));
+                }
+                if(!filter.getSapXep().isEmpty() && filter.getSapXep() != null && filter.getSapXep().equalsIgnoreCase("ngayTao")){
+                    query.orderBy(criteriaBuilder.desc(root.get(filter.getSapXep())));
+                }
+                else if(!filter.getSapXep().isEmpty() && filter.getSapXep() != null && filter.getSapXep().equalsIgnoreCase("price-asc")) {
+                    query.orderBy(criteriaBuilder.asc(root.get("giaBan")));
+                }else{
+                    query.orderBy(criteriaBuilder.desc(root.get("giaBan")));
                 }
                  return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
