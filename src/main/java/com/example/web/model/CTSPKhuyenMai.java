@@ -47,6 +47,4 @@ public class CTSPKhuyenMai {
     @Column(name = "so_tien_sau_khi_giam")
     private BigDecimal soTienSauKhiGiam;
 
-    @Transient
-    private List<ChiTietSanPham> chiTietSanPhams;
 }

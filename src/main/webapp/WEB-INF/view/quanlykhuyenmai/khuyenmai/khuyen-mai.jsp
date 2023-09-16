@@ -36,92 +36,101 @@
     <jsp:include page="../../sidebar/sidebar.jsp"/>
     <div class="col py-3">
         <div class="container">
-            <form action="/admin/khuyen-mai/create" method="post" modelAttribute="${khuyenMai}">
-                <div class="row">
-                    <div class="col-sm-5">
-                        <div class="mb-3 form-floating">
-                            <input type="text" class="form-control" name="ten" id="ten">
-                            <label for="ten">Tên giảm giá</label>
-                        </div>
-                        <div class="row">
-                            <div class="col l-3">
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" id="%" name="loaiGiamGia" value="true"
-                                           checked>
-                                    <label class="form-check-label" for="%">%</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" id="VND" name="loaiGiamGia"
-                                           value="false">
-                                    <label class="form-check-label" for="VND">VND</label>
-                                </div>
-                            </div>
-                            <div class="col l-3">
-                                <div class="mb-3 form-floating">
-                                    <input type="text" class="form-control" name="mucGiamGia" id="mucGiamGia">
-                                    <label for="mucGiamGia">Mức giảm giá</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <%--                            <div class="col l-3">--%>
-                            <%--                                <div class="mb-3 form-floating">--%>
-                            <%--                                    <input type="date" class="form-control" name="ngayBatDau" id="ngayBatDau">--%>
-                            <%--                                    <label for="ngayBatDau">Ngày bắt đầu</label>--%>
-                            <%--                                </div>--%>
-                            <%--                            </div>--%>
-                            <%--                            <div class="col l-3">--%>
-                            <%--                                <div class="mb-3 form-floating">--%>
-                            <%--                                    <input type="date" class="form-control" name="ngayKetThuc" id="ngayKetThuc">--%>
-                            <%--                                    <label for="ngayKetThuc">Ngày kết thúc</label>--%>
-                            <%--                                </div>--%>
-                            <%--                            </div>--%>
-                            <div class="col l-3">
-                                <div>
-                                    <button class="btn btn-primary">Xác nhận</button>
-                                </div>
-                            </div>
-                        </div>
-
+            <form class="row" action="/admin/khuyen-mai/" modelAttrubute="${khuyenMai}">
+                <div class="col-sm-3">
+                    <div>
+                        <input class="form-control" type="text" name="search" placeholder="Tìm kiếm mã , tên">
                     </div>
-                    <div class="col-sm-7">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th scope="col">STT</th>
-                                <th scope="col">Chọn</th>
-                                <th scope="col">Mã</th>
-                                <th scope="col">Tên Sản Phẩm</th>
-                                <th scope="col">Giá</th>
-                                <th scope="col">Trang Thái</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach items="${listCtspSanPham.content}" var="ctsp" varStatus="i">
-                                <tr>
-                                    <th scope="row">${i.index+page}</th>
-                                    <td>
-                                            <input type="checkbox" name="chiTietSanPhams" value="${ctsp.id}">
-                                    </td>
-                                    <td>${ctsp.sanPham.ma}</td>
-                                    <td>${ctsp.sanPham.ten} [${ctsp.mauSac.ten}] [${ctsp.size.ten}]</td>
-                                    <td><fmt:formatNumber pattern="#,###" value="${ctsp.sanPham.giaBan}">
-                                    </fmt:formatNumber></td>
-                                    <td>
-                                        <button style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-                                                type="button"
-                                                class="${ctsp.sanPham.trangThai == 0 ? 'btn btn-success' : 'btn btn-danger'}">
-                                                ${ctsp.sanPham.trangThai == 0 ? 'Kinh doanh' : 'Ngừng kinh doanh'}</button>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                            </tbody>
-                        </table>
+                </div>
+                <div class="col-sm-2">
+                    <select name="loaiGiamGia" class="form-select">
+                        <option value="">Loại</option>
+                        <option value="0">
+                            Phần trăm
+                        </option>
+                        <option value="1">
+                            VND
+                        </option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select name="trangThai" class="form-select">
+                        <option value="">Trang thái</option>
+                        <option value="0" >
+                            Kinh doanh
+                        </option>
+                        <option value="1" >
+                            Chờ
+                        </option>
+                        <option value="2" >
+                            Ngừng Kinh doanh
+                        </option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <div>
+                        <button class="btn btn-primary">Tìm kiếm</button>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div>
+                        <a href="/admin/khuyen-mai/new" class="btn btn-primary"> + Tạo mới</a>
                     </div>
                 </div>
             </form>
             <div class="row">
-
+                <table>
+                    <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Mã</th>
+                        <th scope="col">Tên Khuyến mãi</th>
+                        <th scope="col">Giá trị</th>
+                        <th scope="col">Ngày bắt đầu</th>
+                        <th scope="col">Ngày kết thúc</th>
+                        <th scope="col">Trang Thái</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${khuyenMais.content}" var="khuyenMai" varStatus="i">
+                        <tr onclick="window.location.href='/san-pham/hien-thi/${khuyenMai.id}'">
+                            <th scope="row">${i.index+page}</th>
+                            <td>
+                               ${khuyenMai.ma}
+                            </td>
+                            <td>${khuyenMai.ten}</td>
+                            <td>${khuyenMai.mucGiamGia}${khuyenMai.loaiGiamGia}</td>
+                            <td>
+                                <fmt:formatDate value="${khuyenMai.ngayBatDau}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                            </td>
+                            <td>
+                                <fmt:formatDate value="${khuyenMai.ngayKetThuc}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                            </td>
+                            <td>
+                               ${khuyenMai.trangThai}
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="container-fluid mt-5">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item ${pageNo<=1?"disabled":""}"><a class="page-link"
+                                                                                    href="/admin/khuyen-mai/?page=${pageNo-1}"><</a>
+                                </li
+                                <c:forEach begin="1" end="${khuyenMais.getTotalPages()}" var="i">
+                                    <li class="page-item"><a class="page-link ${i == pageNo ? 'active ' : ''}"
+                                                             href="/san-pham/hien-thi?page=${i}">${i}</a></li>
+                                </c:forEach>
+                                <li class="page-item ${pageNo>=khuyenMais.getTotalPages()?"disabled":""}"><a
+                                        class="page-link"
+                                        href="/admin/khuyen-mai/?page=${pageNo+1}">></a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

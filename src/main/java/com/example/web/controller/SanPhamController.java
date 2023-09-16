@@ -60,7 +60,7 @@ public class SanPhamController {
         Pageable pageable = PageRequest.of(page - 1, 5);
         Page<SanPham> list = iSanPhamService.findAll(pageable);
         model.addAttribute("listSanPham", list);
-            model.addAttribute("listChatLieu", iChatLieuService.getAll());
+        model.addAttribute("listChatLieu", iChatLieuService.getAll());
         model.addAttribute("listFromDang", iFormDangService.getAll());
         model.addAttribute("listDanhMuc", danhMucService.getAll());
         model.addAttribute("filterSanPham", new SanPhamFilter());
