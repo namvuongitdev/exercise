@@ -14,5 +14,4 @@ public class FilterKhuyenMai {
     private String search;
     private String trangThai;
     private String loaiGiamGia;
-    private Boolean isCheck = true;
 }

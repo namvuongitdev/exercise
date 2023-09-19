@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
+<%@ page trimDirectiveWhitespaces="true" %>
 <div class="col l-3">
     <input type="text" class="form-control" name="search" placeholder="tìm kiến" value="${filter.search}">
 </div>

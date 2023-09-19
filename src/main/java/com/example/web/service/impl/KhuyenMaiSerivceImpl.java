@@ -15,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +66,7 @@ public class KhuyenMaiSerivceImpl implements IKhuyenMaiService {
                    predicateList.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("trangThai") , filter.getTrangThai())));
               }
               if(!filter.getLoaiGiamGia().isEmpty() && filter.getLoaiGiamGia() != null){
-                  predicateList.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("loaiGiamGia") , filter.getLoaiGiamGia())));
+                  predicateList.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("loaiGiamGia") , Boolean.parseBoolean(filter.getLoaiGiamGia()))));
 
               }
                 return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));

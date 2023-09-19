@@ -63,6 +63,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
     @Override
     public Page<SanPham> sanPhamFilter(SanPhamFilter filter , Pageable pageable) {
         return iSanPhamRepository.findAll(new Specification<SanPham>() {
+
             @Override
             public Predicate toPredicate(Root<SanPham> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                  List<Predicate> predicates = new ArrayList<>();
@@ -70,8 +71,8 @@ public class SanPhamServiceImpl implements ISanPhamService {
                       predicates.add(criteriaBuilder.or(criteriaBuilder.equal(root.get("ma") , filter.getSearch()) ,
                               criteriaBuilder.equal(root.get("ten") , filter.getSearch())));
                  }
-                 if(!filter.getDanhMuc().isEmpty() && filter.getDanhMuc() != null){
-                     DanhMuc danhMuc = DanhMuc.builder().id(filter.getDanhMuc()).build();
+                 if(!filter.getDanhMuc().isEmpty()  && filter.getDanhMuc() != null){
+                     DanhMuc danhMuc = DanhMuc.builder().id(String.valueOf(filter.getDanhMuc())).build();
                       predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("danhMuc") , danhMuc)));
                  }
                 if(!filter.getChatLieu().isEmpty() && filter.getChatLieu() != null){
@@ -82,13 +83,13 @@ public class SanPhamServiceImpl implements ISanPhamService {
                     KieuDang kieuDang = KieuDang.builder().id(UUID.fromString(filter.getKieuDang())).build();
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("kieuDang") , kieuDang)));
                 }
-                if(!filter.getTrangThai().isEmpty() && filter.getTrangThai() != null){
+                if(filter.getTrangThai() != null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("trangThai") , filter.getTrangThai())));
                 }
                 if(!filter.getSapXep().isEmpty() && filter.getSapXep() != null && filter.getSapXep().equalsIgnoreCase("ngayTao")){
                     query.orderBy(criteriaBuilder.desc(root.get(filter.getSapXep())));
                 }
-                else if(!filter.getSapXep().isEmpty() && filter.getSapXep() != null && filter.getSapXep().equalsIgnoreCase("price-asc")) {
+                else if(!filter.getSapXep().isEmpty() && filter.getSapXep()!= null && filter.getSapXep().equalsIgnoreCase("price-asc")) {
                     query.orderBy(criteriaBuilder.asc(root.get("giaBan")));
                 }else{
                     query.orderBy(criteriaBuilder.desc(root.get("giaBan")));

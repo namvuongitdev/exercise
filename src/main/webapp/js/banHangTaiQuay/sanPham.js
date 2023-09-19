@@ -28,7 +28,7 @@ function getSanPham(page) {
                     `<img style="width: 150px ; height: 150px" src="/image/` + data.content[i][3] + `">` +
                     ` <td>` + data.content[i][6] + `</td>` +
                     ` <td>` + data.content[i][1] + `</td>` +
-                    ` <td>` + VND.format(data.content[i][2]) + `</td>` +
+                    ` <td>` + VND.format(data.content[i].giaBan) + `</td>` +
                     ` <td><button  id="myBtn" name="` + data.content[i][0] + `" onclick="getModal(this.name)" class="btn btn-warning" >Chọn</button></td> </tr>`
             }
 

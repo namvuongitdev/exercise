@@ -45,7 +45,7 @@
                     </div>
                 </nav>
                 <br>
-<%--                filter sản phẩm--%>
+                <%--                filter sản phẩm--%>
                 <div class="row">
                     <form action="/san-pham/filter" modelAttribute="${filterSanPham}">
                         <div class="row">
@@ -53,9 +53,9 @@
                         </div>
                     </form>
 
-                  <div class="col l-3">
-                      <a href="/san-pham/new" class="btn btn-primary">Tạo Mới</a>
-                  </div>
+                    <div class="col l-3">
+                        <a href="/san-pham/new" class="btn btn-primary">Tạo Mới</a>
+                    </div>
                 </div>
                 <hr>
                 <table>
@@ -70,9 +70,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${listSanPham.content}" var="sanPham" varStatus="i">
+                    <c:forEach items="${listSanPham.content}" var="sanPham" varStatus="i">
                         <tr onclick="window.location.href='/san-pham/hien-thi/${sanPham.id}'">
-                            <th scope="row">${i.index+page}</th>
+                            <th scope="row">${i.index + (listSanPham.number + 1 != 1 ? ((listSanPham.number + 1) * listSanPham.size) -(listSanPham.size - 1) : listSanPham.number + 1)}</th>
                             <td>
                                 <img src="/image/${sanPham.img}">
                             </td>
@@ -97,16 +97,16 @@
                 <div class="container-fluid mt-5">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center">
-                            <li class="page-item ${pageNo<=1?"disabled":""}"><a class="page-link"
-                                                                                href="/san-pham/hien-thi?page=${pageNo-1}">Previous</a>
-                            </li
+                            <li class="page-item ${listSanPham.number + 1<=1?"disabled":""}"><a class="page-link"
+                                                                                href="${url}${(listSanPham.number + 1) - 1}"><</a>
+                            </li>
                             <c:forEach begin="1" end="${listSanPham.getTotalPages()}" var="i">
-                                <li class="page-item"><a class="page-link ${i == pageNo ? 'active ' : ''}"
-                                                         href="/san-pham/hien-thi?page=${i}">${i}</a></li>
+                                <li class="page-item"><a class="page-link ${i == listSanPham.number + 1 ? 'active ' : ''}"
+                                                         href="${url}${i}">${i}</a></li>
                             </c:forEach>
-                            <li class="page-item ${pageNo>=listSanPham.getTotalPages()?"disabled":""}"><a
-                                    class="page-link"
-                                    href="/san-pham/hien-thi?page=${pageNo+1}">Next</a>
+                            <li class="page-item ${listSanPham.number + 1 >= listSanPham.getTotalPages() ? "disabled":  ""}">
+                                <a class="page-link"
+                                href="${url}${(listSanPham.number + 1) + 1}">></a>
                             </li>
                         </ul>
                     </nav>

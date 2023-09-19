@@ -36,8 +36,7 @@
     <jsp:include page="../../sidebar/sidebar.jsp"/>
     <div class="col py-3">
         <div class="container">
-            <form action="/admin/khuyen-mai/create" method="post" modelAttribute="${khuyenMai}">
-                <div class="row">
+            <form class="row" action="/admin/khuyen-mai/create" method="post" modelAttribute="${khuyenMai}">
                     <div class="col-sm-5">
                         <div class="mb-3 form-floating">
                             <input type="text" class="form-control" name="ten" id="ten">
@@ -76,10 +75,10 @@
                                     <label for="ngayKetThuc">Ngày kết thúc</label>
                                 </div>
                             </div>
-                            <div class="col l-3">
-                                <div>
-                                    <button class="btn btn-primary">Xác nhận</button>
-                                </div>
+                        </div>
+                        <div class="row">
+                            <div>
+                                <button class="btn btn-primary">Xác nhận</button>
                             </div>
                         </div>
 
@@ -118,7 +117,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
             </form>
             <div class="row">
 

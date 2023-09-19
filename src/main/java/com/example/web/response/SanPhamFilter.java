@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,6 +18,6 @@ public class SanPhamFilter {
     private String danhMuc;
     private String chatLieu;
     private String kieuDang;
-    private String trangThai;
+    private Integer trangThai;
     private String sapXep;
 }

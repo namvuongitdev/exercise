@@ -10,7 +10,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
             crossorigin="anonymous"></script>
-
 </head>
 <style>
     table {
@@ -36,19 +35,19 @@
     <jsp:include page="../../sidebar/sidebar.jsp"/>
     <div class="col py-3">
         <div class="container">
-            <form class="row" action="/admin/khuyen-mai/" modelAttrubute="${khuyenMai}">
+            <form class="row" action="/admin/khuyen-mai/filter" modelAttrubute="${khuyenMai}">
                 <div class="col-sm-3">
                     <div>
-                        <input class="form-control" type="text" name="search" placeholder="Tìm kiếm mã , tên">
+                        <input class="form-control" type="text" name="search" placeholder="Tìm kiếm mã , tên" value="${filter.search}">
                     </div>
                 </div>
                 <div class="col-sm-2">
                     <select name="loaiGiamGia" class="form-select">
                         <option value="">Loại</option>
-                        <option value="0">
+                        <option value="true" ${filter.loaiGiamGia == "true" ? 'selected' : ''}>
                             Phần trăm
                         </option>
-                        <option value="1">
+                        <option value="false" ${filter.loaiGiamGia == "false" ? 'selected' : ''}>
                             VND
                         </option>
                     </select>
@@ -56,14 +55,14 @@
                 <div class="col-sm-2">
                     <select name="trangThai" class="form-select">
                         <option value="">Trang thái</option>
-                        <option value="0" >
-                            Kinh doanh
+                        <option value="0" ${filter.trangThai == "0" ? 'selected' : ''}>
+                            Kích hoạt
                         </option>
-                        <option value="1" >
+                        <option value="1" ${filter.trangThai == "1"? 'selected' : ''}>
                             Chờ
                         </option>
-                        <option value="2" >
-                            Ngừng Kinh doanh
+                        <option value="2" ${filter.trangThai == "2" ? 'selected' : ''}>
+                            Ngừng kích hoạt
                         </option>
                     </select>
                 </div>
@@ -94,7 +93,7 @@
                     <tbody>
                     <c:forEach items="${khuyenMais.content}" var="khuyenMai" varStatus="i">
                         <tr onclick="window.location.href='/san-pham/hien-thi/${khuyenMai.id}'">
-                            <th scope="row">${i.index+page}</th>
+                            <th scope="row">${i.index+ (khuyenMais.number + 1 != 1 ? ((khuyenMais.number + 1) * khuyenMais.size) -(khuyenMais.size - 1) : khuyenMais.number + 1)}</th>
                             <td>
                                ${khuyenMai.ma}
                             </td>
@@ -116,16 +115,17 @@
                     <div class="container-fluid mt-5">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-center">
-                                <li class="page-item ${pageNo<=1?"disabled":""}"><a class="page-link"
-                                                                                    href="/admin/khuyen-mai/?page=${pageNo-1}"><</a>
-                                </li
+                                <li class="page-item ${(khuyenMais.number+1)<=1?"disabled":""}"><a class="page-link"
+                                                                                    href="${url}${(khuyenMais.number + 1) - 1}"><</a>
+                                </li>
                                 <c:forEach begin="1" end="${khuyenMais.getTotalPages()}" var="i">
-                                    <li class="page-item"><a class="page-link ${i == pageNo ? 'active ' : ''}"
-                                                             href="/san-pham/hien-thi?page=${i}">${i}</a></li>
+                                    <li class="page-item"><a class="page-link ${i == (khuyenMais.number + 1) ? 'active ' : ''}"
+                                                             href="${url}${i}">${i}</a></li>
                                 </c:forEach>
-                                <li class="page-item ${pageNo>=khuyenMais.getTotalPages()?"disabled":""}"><a
+                                <li class="page-item ${khuyenMais.number + 1 >= khuyenMais.getTotalPages() ? "disabled" : ""}">
+                                    <a
                                         class="page-link"
-                                        href="/admin/khuyen-mai/?page=${pageNo+1}">></a>
+                                        href="${url}${(khuyenMais.number+1) + 1}">></a>
                                 </li>
                             </ul>
                         </nav>

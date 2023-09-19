@@ -1,5 +1,4 @@
 package com.example.web.controller;
-
 import com.example.web.model.ChiTietSanPham;
 import com.example.web.model.SanPham;
 import com.example.web.response.SanPhamFilter;
@@ -10,6 +9,7 @@ import com.example.web.service.IFormDangService;
 import com.example.web.service.IMauSacService;
 import com.example.web.service.ISanPhamService;
 import com.example.web.service.SizeService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.Date;
 import java.util.UUID;
 
@@ -54,18 +53,21 @@ public class SanPhamController {
     @Autowired
     private IChiTietSanPhamService chiTietSanPhamService;
 
-    @GetMapping("/hien-thi")
-    public String hienThi(Model model, @RequestParam(defaultValue = "1") int page) {
-        if (page < 1) page = 1;
+    @Autowired
+    private HttpServletRequest request;
+
+    private Page<SanPham> sanPhamPage = null;
+
+    @GetMapping(value = "/hien-thi")
+    public String hienThi(Model model, @RequestParam(defaultValue = "1") Integer page) {
         Pageable pageable = PageRequest.of(page - 1, 5);
-        Page<SanPham> list = iSanPhamService.findAll(pageable);
-        model.addAttribute("listSanPham", list);
+        sanPhamPage = iSanPhamService.findAll(pageable);
+        model.addAttribute("listSanPham", sanPhamPage);
         model.addAttribute("listChatLieu", iChatLieuService.getAll());
         model.addAttribute("listFromDang", iFormDangService.getAll());
         model.addAttribute("listDanhMuc", danhMucService.getAll());
         model.addAttribute("filterSanPham", new SanPhamFilter());
-        model.addAttribute("pageNo", page);
-        model.addAttribute("page", page != 1 ? page * 5 - 4 : page);
+        model.addAttribute("url", "/san-pham/hien-thi?page=");
         return "quanLySanPham/sanpham/san-pham";
     }
 
@@ -74,14 +76,14 @@ public class SanPhamController {
                                 @ModelAttribute("filterSanPham") SanPhamFilter filter,
                                 Model model) {
         Pageable pageable = PageRequest.of(page - 1, 5);
-        Page<SanPham> listSanPhamFilter = iSanPhamService.sanPhamFilter(filter, pageable);
-        model.addAttribute("listSanPham", listSanPhamFilter);
+        sanPhamPage = iSanPhamService.sanPhamFilter(filter, pageable);
+        String url = "/san-pham/filter?" + request.getQueryString().replaceAll("[&?]page.*?(?=&|\\?|$)", "") + "&page=";
         model.addAttribute("filter", filter);
+        model.addAttribute("listSanPham", sanPhamPage);
         model.addAttribute("listChatLieu", iChatLieuService.getAll());
         model.addAttribute("listFromDang", iFormDangService.getAll());
         model.addAttribute("listDanhMuc", danhMucService.getAll());
-        model.addAttribute("pageNo", page);
-        model.addAttribute("page", page != 1 ? page * 5 - 4 : page);
+        model.addAttribute("url", url);
         return "quanLySanPham/sanpham/san-pham";
     }
 
@@ -115,8 +117,9 @@ public class SanPhamController {
         } else {
             Date date = java.util.Calendar.getInstance().getTime();
             if (!id.isEmpty()) {
-                SanPham sp = iSanPhamService.getOne(UUID.fromString(id));
-                iSanPhamService.save(sp);
+                SanPham sp  = iSanPhamService.getOne(UUID.fromString(id));
+                sanPham.setId(sp.getId());
+                iSanPhamService.save(sanPham);
             } else {
                 Integer maSanPham = iSanPhamService.getAll().size() + 1;
                 sanPham.setMa("SP" + maSanPham);
